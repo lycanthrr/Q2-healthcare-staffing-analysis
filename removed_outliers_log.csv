@@ -1,0 +1,2 @@
+PROVNUM,PROVNAME,CITY,STATE,COUNTY_NAME,COUNTY_FIPS,CY_Qtr,WorkDate,MDScensus,Hrs_RNDON,Hrs_RNDON_emp,Hrs_RNDON_ctr,Hrs_RNadmin,Hrs_RNadmin_emp,Hrs_RNadmin_ctr,Hrs_RN,Hrs_RN_emp,Hrs_RN_ctr,Hrs_LPNadmin,Hrs_LPNadmin_emp,Hrs_LPNadmin_ctr,Hrs_LPN,Hrs_LPN_emp,Hrs_LPN_ctr,Hrs_CNA,Hrs_CNA_emp,Hrs_CNA_ctr,Hrs_NAtrn,Hrs_NAtrn_emp,Hrs_NAtrn_ctr,Hrs_MedAide,Hrs_MedAide_emp,Hrs_MedAide_ctr
+145446,MARIGOLD REHABILITATION HCC,GALESBURG,IL,Knox,95,2024Q2,2024-05-25,83,0.0,0.0,0.0,0.0,0.0,0.0,7.75,7.75,0.0,0.0,0.0,0.0,13946.25,144.75,13801.5,125.0,99.0,26.0,0.0,0.0,0.0,0.0,0.0,0.0
