@@ -36,9 +36,11 @@ fig = px.choropleth(
     locationmode='USA-states',
     color='nurse_hprd',
     scope='usa',
-    title='Nurse Hours per Resident Day by State'
+    title='Nurse Hours per Resident Day by State',
+    labels={'nurse_hprd': 'HPRD'}
 )
-st.plotly_chart(fig)
+
+st.plotly_chart(fig, config={'scrollZoom': False})
 
 # naming (hospital -> facility)
 total_nurse_hours_facility = df.groupby(['PROVNUM', 'STATE', 'MONTH'])['total_nurse_hours'].sum().reset_index()
@@ -65,7 +67,9 @@ if selected_facilities:
 else:
     facility_filtered = filtered
 
-st.bar_chart(facility_filtered, x='PROVNUM', y='total_nurse_hours')
+chart_df = facility_filtered.copy()
+chart_df['MONTH'] = chart_df['MONTH'].map({4: '4-Apr', 5: '5-May', 6: '6-Jun'})
+st.bar_chart(chart_df, x='PROVNUM', y='total_nurse_hours', color='MONTH')
 
 # ranks whole facilities for the quarter (old version ranked facility-MONTH rows,
 # so one facility could fill up to 3 spots and its months stacked into one bar)
@@ -77,10 +81,12 @@ facility_totals = state_df.groupby(['PROVNUM', 'PROVNAME'])['total_nurse_hours']
 facility_totals['facility'] = facility_totals['PROVNAME'] + ' (' + facility_totals['PROVNUM'] + ')'
 top = facility_totals.set_index('facility')['total_nurse_hours'].sort_values(ascending=False).head(top_n)
 
-st.bar_chart(top, horizontal=True)
+fig_top = px.bar(top.reset_index(), x='total_nurse_hours', y='facility', orientation='h')
+fig_top.update_layout(yaxis={'categoryorder': 'total ascending'})
+st.plotly_chart(fig_top)
 st.dataframe(top)
 
-st.subheader("Distribution of Total Nurse Hours")
+st.subheader("Distribution of Monthly Nurse Hours")
 dist = facility_filtered['total_nurse_hours'].value_counts(bins=20).sort_index()
 dist.index = dist.index.left.round(0)   # use the start of each range as the label
 st.bar_chart(dist)
