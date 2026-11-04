@@ -13,6 +13,7 @@ def load_data():
     )
     df['WorkDate'] = pd.to_datetime(df['WorkDate'], format='%Y%m%d')
     df['total_nurse_hours'] = df['Hrs_RN'] + df['Hrs_LPN'] + df['Hrs_CNA']
+    df['ctr_staff_hours'] = df['Hrs_RN_ctr'] + df['Hrs_LPN_ctr'] + df['Hrs_CNA_ctr']
     df['MONTH'] = df['WorkDate'].dt.month
 
     # remove the known outlier by exact facility + date (not max(),
@@ -90,3 +91,27 @@ st.subheader("Distribution of Monthly Nurse Hours")
 dist = facility_filtered['total_nurse_hours'].value_counts(bins=20).sort_index()
 dist.index = dist.index.left.round(0)   # use the start of each range as the label
 st.bar_chart(dist)
+
+# Shortages: lowest staffing per resident in the selected state
+st.subheader("Facilities with Lowest Staffing per Resident")
+fac = state_df.groupby(['PROVNUM', 'PROVNAME'])[['total_nurse_hours', 'MDScensus']].sum().reset_index()
+fac['HPRD'] = fac['total_nurse_hours'] / fac['MDScensus']
+fac['facility'] = fac['PROVNAME'] + ' (' + fac['PROVNUM'] + ')'
+st.dataframe(fac.sort_values('HPRD').head(10)[['facility', 'HPRD']], hide_index=True)
+st.caption("Very low HPRD (under ~1) is more likely under-reporting than real staffing.")
+
+# Staffing vs. patient load
+st.subheader("Staffing vs. Patient Load")
+daily = state_df.groupby(['PROVNUM', 'PROVNAME'])[['total_nurse_hours', 'MDScensus']].mean().reset_index()
+fig_sc = px.scatter(daily, x='MDScensus', y='total_nurse_hours', hover_name='PROVNAME',
+                    labels={'MDScensus': 'Avg residents per day', 'total_nurse_hours': 'Avg nurse hours per day'})
+st.plotly_chart(fig_sc)
+
+# Contract reliance (closest stand-in for overtime)
+st.subheader("Contract Staff Reliance by State (Top 15)")
+ctr = df.groupby('STATE')[['ctr_staff_hours', 'total_nurse_hours']].sum().reset_index()
+ctr['contract_ratio'] = ctr['ctr_staff_hours'] / ctr['total_nurse_hours']
+fig_ctr = px.bar(ctr.sort_values('contract_ratio', ascending=False).head(15), x='STATE', y='contract_ratio',
+                 labels={'contract_ratio': 'Share of nurse hours from contract staff'})
+fig_ctr.update_layout(yaxis_tickformat='.0%')
+st.plotly_chart(fig_ctr)
