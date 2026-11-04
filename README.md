@@ -8,7 +8,7 @@ Analysis of daily nurse staffing at 14,564 U.S. nursing homes using CMS Payroll 
 
 | File | What it is |
 | --- | --- |
-| `e2e_healthcare.ipynb` | EDA, cleaning, metrics, and analysis |
+| `nursing_home_staffing.ipynb` | EDA, cleaning, metrics, and analysis |
 | `streamlit_app.py` | Interactive dashboard |
 | `removed_outliers_log.csv` | The one outlier row removed during cleaning |
 
@@ -29,8 +29,9 @@ streamlit run streamlit_app.py
 ## Key metrics
 
 - **HPRD (Hours Per Resident Day)** = total nurse hours ÷ residents
-- **Contract ratio** = contract nurse hours ÷ total nurse hours
+- **Contract ratio** = contract nurse hours ÷ total nurse hours (stand-in for overtime, which PBJ doesn't report)
 - Total nurse hours, average resident census, and top facilities by hours
+
 
 ## Key findings
 
@@ -38,3 +39,4 @@ streamlit run streamlit_app.py
 - MO (2.41), TX (2.68), and OK (2.80) have the lowest HPRD; AK (5.41) and OR (4.20) the highest.
 - Vermont relies most on contract staff, at 32% of nurse hours.
 - More residents means more hours (0.91 correlation), so HPRD is needed for fair comparisons.
+- Some facilities report HPRD below 1 (as low as 0.07), most likely under-reporting than real staffing.
