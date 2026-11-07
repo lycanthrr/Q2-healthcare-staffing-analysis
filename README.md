@@ -4,6 +4,7 @@ Analysis of daily nurse staffing at 14,564 U.S. nursing homes using CMS Payroll 
 
 **Tools:** Python, pandas, NumPy, Jupyter Notebook, Streamlit
 
+
 ## Files
 
 | File | What it is |
@@ -22,7 +23,7 @@ The raw CSV (~220 MB) is too large for GitHub, so it isn't included.
 ## How to run
 
 ```bash
-pip install pandas numpy streamlit jupyter
+pip pip install pandas numpy streamlit jupyter plotly statsmodels
 streamlit run streamlit_app.py
 ```
 
