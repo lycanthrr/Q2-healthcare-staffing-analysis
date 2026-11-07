@@ -104,6 +104,7 @@ st.caption("Very low HPRD (under ~1) is more likely under-reporting than real st
 st.subheader("Staffing vs. Patient Load")
 daily = state_df.groupby(['PROVNUM', 'PROVNAME'])[['total_nurse_hours', 'MDScensus']].mean().reset_index()
 fig_sc = px.scatter(daily, x='MDScensus', y='total_nurse_hours', hover_name='PROVNAME',
+                    trendline='ols',
                     labels={'MDScensus': 'Avg residents per day', 'total_nurse_hours': 'Avg nurse hours per day'})
 st.plotly_chart(fig_sc)
 
